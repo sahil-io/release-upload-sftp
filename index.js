@@ -58,7 +58,7 @@ async function syncFiles(args) {
 	try {
 		await core.group("Uploading files", async () => {
 
-			let result = await exec.exec(`zip -r ${args.package_name}.zip`);
+			let result = await exec.exec(`zip -r ${args.package_name}.zip .`);
 			console.log(result)
 			result = await exec.exec(`ls -l`);
 			console.log(result)
