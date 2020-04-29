@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const exec = require('@actions/exec');
 const fs = require('fs');
-import {promisify} from 'util';
+const promisify = require('util').promisify;
 
 const writeFileAsync = promisify(fs.writeFile);
 
