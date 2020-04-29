@@ -20,7 +20,7 @@ async function run() {
 }
 
 
-run().then(r => core.setOutput(r));
+run()
 
 function getUserArguments() {
 	return {
@@ -56,7 +56,7 @@ async function configureHost(args) {
 async function syncFiles(args) {
 	try {
 		await core.group("Uploading files", async () => {
-			let result = await exec.exec(`ls && pwd`);
+			let result = await exec.exec(`ls`);
 			console.log(result)
 
 			return result;
