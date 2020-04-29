@@ -41,6 +41,7 @@ async function configureHost(args) {
 		const sshFolder = `${process.env['HOME']}/.ssh`;
 		await exec.exec(`mkdir -v -p ${sshFolder}`);
 		await writeFileAsync(`${sshFolder}/id_rsa`, args.ssh_private_key);
+		await exec.exec(`chmod 600 ${sshFolder}/id_rsa`);
 		await exec.exec(`chmod 700 ${sshFolder}`);
 		await writeFileAsync(`${sshFolder}/known_hosts`, '');
 		await exec.exec(`chmod 755 ${sshFolder}/known_hosts`);
