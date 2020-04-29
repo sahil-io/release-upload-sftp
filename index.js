@@ -56,16 +56,16 @@ async function configureHost(args) {
  */
 async function syncFiles(args) {
 	try {
-		await core.group("Uploading files", async () => {
+		await core.group("Compressing files", async () => {
 
-			let result = await exec.exec(`zip -r ${args.package_name}.zip .`);
+			let result = await exec.exec(`git archive -o ${args.package_name}.zip HEAD`);
 			console.log(result)
 			result = await exec.exec(`ls -l`);
 			console.log(result)
 			return result;
 		});
 	} catch (error) {
-		console.error("⚠️ Failed to upload files");
+		console.error("⚠️ Failed to compress files");
 		core.setFailed(error.message);
 		throw error;
 	}
