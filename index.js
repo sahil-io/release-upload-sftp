@@ -59,6 +59,11 @@ async function uploadFiles(args) {
 		await core.group("Deploying files", async () => {
 			console.log("Archiving Files ... ⏳");
 			await exec.exec(`git archive -v -o ${args.package_name}.zip HEAD`);
+			await exec.exec(`unzip ${args.package_name}.zip -d ${args.package_name}`);
+			await exec.exec(`rm -rf ${args.package_name}.zip`);
+			await exec.exec(`zip -r ${args.package_name}.zip ${args.package_name}`);
+
+
 			console.log("✅ Files ready")
 
 			console.log("Uploading package to the server ... ⏳");
