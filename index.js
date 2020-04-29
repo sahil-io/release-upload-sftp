@@ -60,7 +60,7 @@ async function configureHost(args) {
 async function syncFiles(args) {
 	try {
 		await core.group("Compressing files", async () => {
-			let result = await exec.exec(`git archive -vo ${args.package_name}.zip HEAD`);
+			let result = await exec.exec(`git archive -v -o ${args.package_name}.zip HEAD`);
 			console.log(result)
 			result = await exec.exec(`ls -l`);
 			console.log(result)
