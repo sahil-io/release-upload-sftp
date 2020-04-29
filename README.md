@@ -51,6 +51,7 @@ jobs:
           package_name: 'demo-package'
           username: 'ubuntu'
           server: '${{ secrets.SERVER_IP }}'
+          port: 20
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           local_path: './*'
           remote_path: ${{ secrets.REMOTE_PATH}}
