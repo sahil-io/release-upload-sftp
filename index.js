@@ -26,6 +26,7 @@ function getUserArguments() {
 	return {
 		username: core.getInput("username", {required: true}),
 		server: core.getInput("server", {required: true}),
+		port: core.getInput("port", {required: true}),
 		ssh_private_key: core.getInput("ssh_private_key", {required: true}),
 		local_path: core.getInput("local_path", {required: true}),
 		remote_path: core.getInput("remote_path", {required: true}),
