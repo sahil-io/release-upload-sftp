@@ -6,12 +6,12 @@ const promisify = require('util').promisify;
 const writeFileAsync = promisify(fs.writeFile);
 
 
-async function run() {
+async function init() {
 	const userArguments = getUserArguments();
-
 	try {
+		console.log("Configuring private_key .... ⏳");
 		await configureHost(userArguments);
-		await syncFiles(userArguments)
+		await uploadFiles(userArguments)
 		console.log("✅ Deploy Complete");
 	} catch (error) {
 		console.error("⚠️ Error deploying");
@@ -20,7 +20,7 @@ async function run() {
 }
 
 
-run()
+init()
 
 function getUserArguments() {
 	return {
@@ -46,30 +46,29 @@ async function configureHost(args) {
 		await writeFileAsync(`${sshFolder}/known_hosts`, '');
 		await exec.exec(`chmod 755 ${sshFolder}/known_hosts`);
 		await writeFileAsync(`${process.env['HOME']}/sftp_command`, `put ${args.package_name}.zip ${args.remote_path}`);
-		console.log("✅ Configured known_hosts");
+		console.log("✅ Configured private_key");
 	} catch (error) {
-		console.error("⚠️ Error configuring known_hosts");
+		console.error("⚠️ Error configuring private_key");
 		throw error;
 	}
 }
 
 
-/**
- * Sync changed files
- */
-async function syncFiles(args) {
+async function uploadFiles(args) {
 	try {
-		await core.group("Compressing files", async () => {
-			let result = await exec.exec(`git archive -v -o ${args.package_name}.zip HEAD`);
-			console.log(result)
-			result = await exec.exec(`ls -l`);
-			console.log(result)
-			result = await exec.exec(`sftp -b ${process.env['HOME']}/sftp_command -P ${args.port} -o StrictHostKeyChecking=no ${args.username}@${args.server}`);
-			console.log(result)
-			return result;
+		await core.group("Deploying files", async () => {
+			console.log("Archiving Files ... ⏳");
+			await exec.exec(`git archive -v -o ${args.package_name}.zip HEAD`);
+			console.log("✅ Files ready")
+
+			console.log("Uploading package to the server ... ⏳");
+			await exec.exec(`sftp -b ${process.env['HOME']}/sftp_command -P ${args.port} -o StrictHostKeyChecking=no ${args.username}@${args.server}`);
+			console.log("✅ Package successfully uploaded")
+
+			return true;
 		});
 	} catch (error) {
-		console.error("⚠️ Failed to compress files");
+		console.error("⚠️ Failed to deploy files");
 		core.setFailed(error.message);
 		throw error;
 	}
