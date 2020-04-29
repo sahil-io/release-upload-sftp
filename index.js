@@ -11,7 +11,7 @@ async function run() {
 
 	try {
 		await configureHost(userArguments);
-
+		await syncFiles(userArguments)
 		console.log("✅ Deploy Complete");
 	} catch (error) {
 		console.error("⚠️ Error deploying");
@@ -19,6 +19,8 @@ async function run() {
 	}
 }
 
+
+run().then(r => core.setOutput(r));
 
 function getUserArguments() {
 	return {
