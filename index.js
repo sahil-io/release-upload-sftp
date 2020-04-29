@@ -28,7 +28,8 @@ function getUserArguments() {
 		server: core.getInput("server", {required: true}),
 		ssh_private_key: core.getInput("ssh_private_key", {required: true}),
 		local_path: core.getInput("local_path", {required: true}),
-		remote_path: core.getInput("remote_path", {required: true})
+		remote_path: core.getInput("remote_path", {required: true}),
+		package_name: core.getInput("package_name", {required: true})
 	};
 }
 
@@ -56,9 +57,11 @@ async function configureHost(args) {
 async function syncFiles(args) {
 	try {
 		await core.group("Uploading files", async () => {
-			let result = await exec.exec(`ls`);
-			console.log(result)
 
+			let result = await exec.exec(`zip -r ${args.package_name}`);
+			console.log(result)
+			result = await exec.exec(`ls -l`);
+			console.log(result)
 			return result;
 		});
 	} catch (error) {

@@ -1,6 +1,9 @@
 name: 'Release Upload SFTP'
 description: 'Upload release zip file to SFTP server'
 inputs:
+  package_name:
+    description: 'name of the zip file'
+    required: true
   username:
     description: 'username'
     required: true
