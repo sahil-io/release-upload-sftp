@@ -30,7 +30,9 @@ function getUserArguments() {
 		ssh_private_key: core.getInput("ssh_private_key", {required: true}),
 		local_path: core.getInput("local_path", {required: true}),
 		remote_path: core.getInput("remote_path", {required: true}),
-		package_name: core.getInput("package_name", {required: true})
+		package_name: core.getInput("package_name", {required: true}),
+
+		script_path: core.getInput("script_path", {required: false})
 	};
 }
 
@@ -53,11 +55,22 @@ async function configureHost(args) {
 	}
 }
 
+async function runScripts(args){
+	await exec.exec(`chmod +x ${args.script_path}`);
+	await exec.exec(`${args.script_path}`);
+
+}
+
 
 async function uploadFiles(args) {
 	try {
 		await core.group("Deploying files", async () => {
 			console.log("Archiving Files ... ⏳");
+
+			if(args.local_path){
+				await runScripts(args)
+			}
+
 			await exec.exec(`git archive -v -o ${args.package_name}.zip --worktree-attributes HEAD`);
 			await exec.exec(`unzip ${args.package_name}.zip -d ${args.package_name}`);
 			await exec.exec(`rm -rf ${args.package_name}.zip`);
