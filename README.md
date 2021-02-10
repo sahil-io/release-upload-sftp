@@ -26,6 +26,9 @@ local_path:
 remote_path:
     description: 'release file
     required: true
+script_path:
+    description: 'script to run'
+    required: false
 ```
 
 ## Example usage
