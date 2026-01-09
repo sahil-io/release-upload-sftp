@@ -22,6 +22,9 @@ inputs:
   remote_path:
     description: 'release file will deploy to this directory'
     required: true
+  script_path:
+    description: 'shell script to run in addition to deploy'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
